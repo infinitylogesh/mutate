@@ -1,7 +1,7 @@
 # 🦠 Mutate   <br>
 
 A library to synthesize text datasets using Large Language Models (LLM). Mutate reads through the examples in the dataset and 
-generates similar examples using few shot prompts.
+generates similar examples using auto generated few shot prompts.
 
 ## 1. Installation
 
@@ -60,6 +60,8 @@ for synthesized_examples  in text_synth_gen:
 
 
 ### 2.2 Synthesize text data from 🤗 datasets
+
+Mutate uses the wornderful 🤗 datasets library for dataset processing, So it supports 🤗 datasets out of the box.
 
 ```python
 
@@ -149,7 +151,6 @@ for exp in synthesizerGen:
 ### 3.2 Roadmap:
 - **NER Dataset synthesis pipeline** 
 - **Controlled Text Generation** : Finetuning support for LLMs for better quality generation
-- **Deepspeed support** : Deepspeed support for inference on low memory GPUs
 
 
 ## 4. Credit
