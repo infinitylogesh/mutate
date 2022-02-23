@@ -65,7 +65,7 @@ Mutate uses the wornderful 🤗 datasets library for dataset processing, So it s
 
 ```python
 
-from muatate import pipeline
+from mutate import pipeline
 
 pipe = pipeline("text-classification-synthesize",
                 model="EleutherAI/gpt-neo-2.7B",
