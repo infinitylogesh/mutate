@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import List, Dict, Union, Optional
+from typing import List, Dict, Union, Optional,Iterator
 from jinja2 import Template
 from datasets import load_dataset
 from torch.utils.data import IterableDataset, DataLoader
@@ -144,7 +144,7 @@ class TextClassSynthesizePromptDataset(IterableDataset):
         return True
 
 
-    def __iter__(self) -> Dict[str,str]:
+    def __iter__(self) -> Iterator[Dict[str,str]]:
 
         for idx, class_name in enumerate(self.class_names):
             filter_value = idx if self._is_label_encoded else class_name
