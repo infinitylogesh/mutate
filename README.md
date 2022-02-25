@@ -16,7 +16,7 @@ pip install git+https://github.com/infinitylogesh/mutate
 ```python
 from mutate import pipeline
 
-pipe = pipeline("text-classification-synthesize",
+pipe = pipeline("text-classification-synthesis",
                 model="EleutherAI/gpt-neo-2.7B",
                 device=1)
 
@@ -67,7 +67,7 @@ Mutate uses the wornderful 🤗 datasets library for dataset processing, So it s
 
 from mutate import pipeline
 
-pipe = pipeline("text-classification-synthesize",
+pipe = pipeline("text-classification-synthesis",
                 model="EleutherAI/gpt-neo-2.7B",
                 device=1)
 
@@ -119,7 +119,7 @@ for exp in synthesizerGen:
 
 from mutate import pipeline
 
-pipe = pipeline("text-classification-synthesize",
+pipe = pipeline("text-classification-synthesis",
                 model="EleutherAI/gpt-neo-2.7B",
                 device=1)
 

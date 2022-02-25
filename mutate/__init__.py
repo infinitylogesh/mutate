@@ -3,7 +3,7 @@ from transformers import PreTrainedModel
 from typing import List, Optional, Union, Dict
 
 SUPPORTED_TASKS = {
-    "text-classification-synthesize":TextClassificationSynthesize
+    "text-classification-synthesis":TextClassificationSynthesize
 }
 
 
@@ -38,7 +38,7 @@ def pipeline(task:str,
         Using the default generation params:
 
         >> pipe = pipeline(
-                "text-classification-synthesize",
+                "text-classification-synthesis",
                 model="EleutherAI/gpt-neo-2.7B",
                 device=1,
             )
@@ -46,7 +46,7 @@ def pipeline(task:str,
         Overriding the generation params:
 
         >> pipe = pipeline(
-                "text-classification-synthesize",
+                "text-classification-synthesis",
                 model="EleutherAI/gpt-neo-2.7B",
                 device=1,
                 generation_kwargs = {
