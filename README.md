@@ -11,6 +11,9 @@ pip install git+https://github.com/infinitylogesh/mutate
 
 ## 2. Usage
 
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1dPDVl3EvmsnJc7lxWYdAnTtlJgJjR2O2?usp=sharing)
+
+
 ### 2.1 Synthesize text data from local csv files
 
 ```python
@@ -31,6 +34,7 @@ text_synth_gen = pipe("csv",
                     label_column="label",
                     text_column_alias="Comment",
                     label_column_alias="sentiment",
+                    shot_count=5,
                     class_names=["pos","neg"])
 
 #Loop through the generator to synthesize examples by class
@@ -61,7 +65,7 @@ for synthesized_examples  in text_synth_gen:
 
 ### 2.2 Synthesize text data from 🤗 datasets
 
-Mutate uses the wornderful 🤗 datasets library for dataset processing, So it supports 🤗 datasets out of the box.
+Under the hood Mutate uses the wonderful 🤗 datasets library for dataset processing, So it supports 🤗 datasets out of the box.
 
 ```python
 
@@ -80,6 +84,7 @@ synthesizerGen = pipe("banking77",
                     # if the `text_column` doesn't have a meaningful value
                     text_column_alias="Queries", 
                     label_column_alias="Intent", # if the `label_column` doesn't have a meaningful value
+                    shot_count=5,
                     dataset_args=["en"])
                        
                        
