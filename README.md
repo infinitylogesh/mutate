@@ -154,8 +154,9 @@ for exp in synthesizerGen:
 -  **Text classification dataset synthesis** : Few Shot text data synsthesize for text classification datasets using Causal LLMs ( GPT like )
 
 ### 3.2 Roadmap:
-- **NER Dataset synthesis pipeline** 
-- **Controlled Text Generation** : Finetuning support for LLMs for better quality generation
+- **Other types of text Dataset synthesis** - NER , sentence pairs etc 
+- Finetuning support for better quality generation
+- Pseudo labelling 
 
 
 ## 4. Credit
