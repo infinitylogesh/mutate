@@ -14,7 +14,7 @@ setup(
         'numpy',
         'torch>=1.0',
         'jinja2==3.0.3',
-        'transformers==4.5.1',
+        'transformers>=4.5.1',
         'datasets==1.6.2'
     ]
 )
