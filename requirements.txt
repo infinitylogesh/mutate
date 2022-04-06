@@ -3,5 +3,5 @@ tqdm==4.49.0
 numpy==1.19.5
 torch>=1.0
 jinja2==3.0.3
-transformers==4.5.1
+transformers>=4.5.1
 datasets==1.6.2
