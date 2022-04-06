@@ -15,6 +15,6 @@ setup(
         'torch>=1.0',
         'jinja2==3.0.3',
         'transformers<=4.12.3',
-        'datasets==1.6.2'
+        'datasets>=1.6.2'
     ]
 )
