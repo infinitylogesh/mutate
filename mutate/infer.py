@@ -1,4 +1,4 @@
-from transformers import AutoModelForCausalLM, AutoModelForCausalLM, AutoTokenizer
+from transformers import AutoModelForCausalLM, AutoModelForSeq2SeqLM, AutoTokenizer
 import numpy as np
 import torch
 from typing import Optional, List, Dict, Union
@@ -7,7 +7,7 @@ from tqdm import tqdm
 
 
 class TextGeneration:
-    def __init__(self, model_name: str, device: Optional[int] = -1):
+    def __init__(self, model_name: str, device: Optional[int] = -1,encoder_decoder: Optional[bool]=False):
         """
         Class for text generation inference. 
         Currently supports only CausalLM models
@@ -16,9 +16,14 @@ class TextGeneration:
             model_name (str): model name or path to load model from model hub / local path
             device (Optional[int]): GPU Device to run the inference. Positive integer values runs on corresponding device ID.
                                     Defaults to -1 which runs on "cpu".
+            encoder_decoder (bool): Is the model an encoder-decoder LM model , If not the model will be considered as decoder only.
+                                    Defaults to False
         """
         self.tokenizer = AutoTokenizer.from_pretrained(model_name)
-        self.model = AutoModelForCausalLM.from_pretrained(model_name,pad_token_id=self.tokenizer.eos_token_id)
+        if not encoder_decoder:
+            self.model = AutoModelForCausalLM.from_pretrained(model_name,pad_token_id=self.tokenizer.eos_token_id)
+        else:
+            self.model = AutoModelForSeq2SeqLM.from_pretrained(model_name,pad_token_id=self.tokenizer.eos_token_id)
         # Done to avoid error from tokenizer, when padding is set True for batch encoding.
         # as per this - https://github.com/huggingface/transformers/issues/4122
         self.tokenizer.pad_token = self.tokenizer.eos_token
