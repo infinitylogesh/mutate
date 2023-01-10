@@ -4,7 +4,7 @@ import re
 
 class TextClassificationSynthesizeParser(GenerationParser):
 
-    regex_template = """.*{{label_title}}.*:.*{{label}}.*,.*{{example_title}}.*: (.*)"""
+    regex_template = """.*{{label_title}}.*:.*{{label}}.*,.*{{example_title}}.*:(.*)"""
 
     def __init__(
         self,
