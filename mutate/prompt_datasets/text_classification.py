@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import List, Dict, Union, Optional,Iterator
+from typing import List, Dict, Union, Optional, Iterator
 from jinja2 import Template
 from datasets import load_dataset
 from torch.utils.data import IterableDataset, DataLoader
@@ -17,18 +17,18 @@ class TextClassSynthesizePromptDataset(IterableDataset):
         text_column_alias: Optional[str] = None,
         label_column_alias: Optional[str] = None,
         split: Optional[str] = None,
-        data_files:Union[Dict, List] = None,
-        data_dir:Optional[str] = None,
+        data_files: Union[Dict, List] = None,
+        data_dir: Optional[str] = None,
         dataset_args: Optional[List[str]] = [],
-        dataset_kwargs: Optional[Dict[str,str]] = {},
+        dataset_kwargs: Optional[Dict[str, str]] = {},
         class_names: Optional[List[str]] = None,
         shot_count: Optional[int] = 5,
         prompt_template: Optional[str] = text_classification_synthesize_template,
     ):
         """
         Iterable dataset to Loop through the dataset by class and generate prompts.
-        Uses 🤗 Datasets for loading and processing the dataset. 
-        Loading process is similar to 🤗 Datasets - 
+        Uses 🤗 Datasets for loading and processing the dataset.
+        Loading process is similar to 🤗 Datasets -
         https://huggingface.co/docs/datasets/loading.html
 
         Args:
@@ -55,7 +55,7 @@ class TextClassSynthesizePromptDataset(IterableDataset):
                 If class names are not part of huggingface datasets features.if values in the label columns are label encoded.
                 class name order is expected to follow the same order as the label encoding.Defaults to None.
             shot_count (Optional[int], optional): Number of examples to be used in the few shot prompt. Defaults to 5.
-        
+
         Examples:
         ---------
 
@@ -87,12 +87,18 @@ class TextClassSynthesizePromptDataset(IterableDataset):
                 class_names=["positive","negative","neutral"],
                 dataset_args=["en"],
             )
-        """        
-
+        """
 
         super().__init__()
-    
-        self.dataset = load_dataset(path,*dataset_args,split=split,data_files=data_files,data_dir=data_dir,**dataset_kwargs)
+
+        self.dataset = load_dataset(
+            path,
+            *dataset_args,
+            split=split,
+            data_files=data_files,
+            data_dir=data_dir,
+            **dataset_kwargs,
+        )
         self.text_column = text_column
         self.label_column = label_column
         self.label_title = label_column_alias if label_column_alias else label_column
@@ -100,18 +106,22 @@ class TextClassSynthesizePromptDataset(IterableDataset):
         self.task_desc = task_desc
         self.shot_count = shot_count
         self.prompt_template = prompt_template
-    
+
         if not split:
             splits = list(self.dataset.keys())
             split = "train" if "train" in splits else splits[0]
             self.dataset = self.dataset[split]
 
         if text_column not in self.dataset.features:
-            raise ValueError(f"""Supplied text_column - `{text_column}` not in the dataset. Columns in the dataset are {list(self.dataset.features)}""")
+            raise ValueError(
+                f"""Supplied text_column - `{text_column}` not in the dataset. Columns in the dataset are {list(self.dataset.features)}"""
+            )
 
         if label_column not in self.dataset.features:
-            raise ValueError(f"""Supplied label_column - `{label_column}` not in the dataset.
-                                 Columns in the dataset are {list(self.dataset.features)}""")
+            raise ValueError(
+                f"""Supplied label_column - `{label_column}` not in the dataset.
+                                 Columns in the dataset are {list(self.dataset.features)}"""
+            )
 
         if class_names:
             self.class_names = class_names
@@ -125,7 +135,7 @@ class TextClassSynthesizePromptDataset(IterableDataset):
             )
 
     @staticmethod
-    def _collate_fn(tokenizer,device,batch):
+    def _collate_fn(tokenizer, device, batch):
         prompts = [batch_item["prompt"] for batch_item in batch]
         class_names = [batch_item["class_name"] for batch_item in batch]
         model_inputs = tokenizer.batch_encode_plus(
@@ -135,27 +145,29 @@ class TextClassSynthesizePromptDataset(IterableDataset):
         model_inputs["prompts"] = prompts
         model_inputs["class_names"] = class_names
         return model_inputs
-    
+
     @property
     def _is_label_encoded(self):
-        """ Naive checking if the values in label column is label encoded """
+        """Naive checking if the values in label column is label encoded"""
         if type(self.class_names[0]) == type(self.dataset[self.label_column][0]):
             return False
         return True
 
-
-    def __iter__(self) -> Iterator[Dict[str,str]]:
+    def __iter__(self) -> Iterator[Dict[str, str]]:
 
         for idx, class_name in enumerate(self.class_names):
             filter_value = idx if self._is_label_encoded else class_name
             class_dataset = self.dataset.filter(
                 lambda ex: ex[self.label_column] == filter_value
             )
-            
+
             for i in range(0, class_dataset.num_rows, self.shot_count):
-                texts = class_dataset.select(range(i, i + self.shot_count))[
-                    self.text_column
-                ]
+                _to = (
+                    class_dataset.num_rows
+                    if (i + self.shot_count) > class_dataset.num_rows
+                    else (i + self.shot_count)
+                )
+                texts = class_dataset.select(range(i, _to))[self.text_column]
                 prompt = _create_prompt_for_text_class_synthesize(
                     template=self.prompt_template,
                     task_desc=self.task_desc,
