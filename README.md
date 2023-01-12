@@ -27,7 +27,7 @@ pip install git+https://github.com/infinitylogesh/mutate
 from mutate import pipeline
 
 pipe = pipeline("text-classification-synthesis",
-                model="EleutherAI/gpt-neo-125M",
+                model="EleutherAI/gpt-neo-2.7B",
                 device=1)
 
 task_desc = "Each item in the following contains movie reviews and corresponding sentiments. Possible sentimets are neg and pos"

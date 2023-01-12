@@ -5,8 +5,8 @@ from datasets import load_dataset
 from jinja2 import Template
 from torch.utils.data import DataLoader, IterableDataset
 
-from mutate_nlp.prompt_datasets.templates import text_classification_synthesize_template
-from mutate_nlp.prompt_datasets.utils import _create_prompt_for_text_class_synthesize
+from mutate.prompt_datasets.templates import text_classification_synthesize_template
+from mutate.prompt_datasets.utils import _create_prompt_for_text_class_synthesize
 
 
 class TextClassSynthesizePromptDataset(IterableDataset):

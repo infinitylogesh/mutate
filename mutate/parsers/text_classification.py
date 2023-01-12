@@ -1,7 +1,7 @@
 import re
 from typing import Dict, List, Optional
 
-from mutate_nlp.parsers.parser import GenerationParser
+from mutate.parsers.parser import GenerationParser
 
 
 class TextClassificationSynthesizeParser(GenerationParser):
