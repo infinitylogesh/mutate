@@ -1,10 +1,12 @@
 from abc import ABC, abstractmethod
-from typing import List, Dict, Union, Optional, Iterator
-from jinja2 import Template
+from typing import Dict, Iterator, List, Optional, Union
+
 from datasets import load_dataset
-from torch.utils.data import IterableDataset, DataLoader
-from mutate.prompt_datasets.utils import _create_prompt_for_text_class_synthesize
-from mutate.prompt_datasets.templates import text_classification_synthesize_template
+from jinja2 import Template
+from torch.utils.data import DataLoader, IterableDataset
+
+from mutate_nlp.prompt_datasets.templates import text_classification_synthesize_template
+from mutate_nlp.prompt_datasets.utils import _create_prompt_for_text_class_synthesize
 
 
 class TextClassSynthesizePromptDataset(IterableDataset):
@@ -154,7 +156,6 @@ class TextClassSynthesizePromptDataset(IterableDataset):
         return True
 
     def __iter__(self) -> Iterator[Dict[str, str]]:
-
         for idx, class_name in enumerate(self.class_names):
             filter_value = idx if self._is_label_encoded else class_name
             class_dataset = self.dataset.filter(

@@ -1,13 +1,20 @@
 # 🦠 Mutate   <br>
 
-A library to synthesize text datasets using Large Language Models (LLM). Mutate reads through the examples in the dataset and 
+A library to synthesize text datasets using Large Language Models (LLM). Mutate reads through the examples in the dataset and
 generates similar examples using auto generated few shot prompts.
 
 ## 1. Installation
 
 ```
+pip install mutate-nlp
+```
+
+or
+
+```
 pip install git+https://github.com/infinitylogesh/mutate
 ```
+
 
 ## 2. Usage
 
@@ -20,13 +27,13 @@ pip install git+https://github.com/infinitylogesh/mutate
 from mutate import pipeline
 
 pipe = pipeline("text-classification-synthesis",
-                model="EleutherAI/gpt-neo-2.7B",
+                model="EleutherAI/gpt-neo-125M",
                 device=1)
 
 task_desc = "Each item in the following contains movie reviews and corresponding sentiments. Possible sentimets are neg and pos"
 
 
-# returns a python generator  
+# returns a python generator
 text_synth_gen = pipe("csv",
                     data_files=["local/path/sentiment_classfication.csv"],
                     task_desc=task_desc,
@@ -82,12 +89,12 @@ synthesizerGen = pipe("banking77",
                     text_column="text",
                     label_column="label",
                     # if the `text_column` doesn't have a meaningful value
-                    text_column_alias="Queries", 
+                    text_column_alias="Queries",
                     label_column_alias="Intent", # if the `label_column` doesn't have a meaningful value
                     shot_count=5,
                     dataset_args=["en"])
-                       
-                       
+
+
 for exp in synthesizerGen:
     print(exp)
 
@@ -131,7 +138,7 @@ pipe = pipeline("text-classification-synthesis",
 task_desc = "Each item in the following contains movie reviews and corresponding sentiments. Possible sentimets are neg and pos"
 
 
-# returns a python generator  
+# returns a python generator
 text_synth_gen = pipe("csv",
                     data_files=["local/path/sentiment_classfication.csv"],
                     task_desc=task_desc,
@@ -154,9 +161,9 @@ for exp in synthesizerGen:
 -  **Text classification dataset synthesis** : Few Shot text data synsthesize for text classification datasets using Causal LLMs ( GPT like )
 
 ### 3.2 Roadmap:
-- **Other types of text Dataset synthesis** - NER , sentence pairs etc 
+- **Other types of text Dataset synthesis** - NER , sentence pairs etc
 - Finetuning support for better quality generation
-- Pseudo labelling 
+- Pseudo labelling
 
 
 ## 4. Credit
