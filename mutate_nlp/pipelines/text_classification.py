@@ -1,16 +1,18 @@
-from transformers import PreTrainedModel, set_seed
-from typing import List, Optional, Union, Dict
-from torch.utils.data import DataLoader
-from itertools import cycle
 from functools import partial
-from mutate.parsers.text_classification import TextClassificationSynthesizeParser
-from mutate.prompt_datasets.text_classification import TextClassSynthesizePromptDataset
-from mutate.infer import TextGeneration
+from itertools import cycle
+from typing import Dict, List, Optional, Union
 
+from torch.utils.data import DataLoader
+from transformers import PreTrainedModel, set_seed
+
+from mutate_nlp.infer import TextGeneration
+from mutate_nlp.parsers.text_classification import TextClassificationSynthesizeParser
+from mutate_nlp.prompt_datasets.text_classification import (
+    TextClassSynthesizePromptDataset,
+)
 
 
 class TextClassificationSynthesize:
-
     generate_kwargs = {
         "max_length": 300,
         "do_sample": True,
@@ -28,8 +30,8 @@ class TextClassificationSynthesize:
         **generate_kwargs
     ):
         """
-        Pipeline to synthesize Text classification examples from a given dataset. 
-        
+        Pipeline to synthesize Text classification examples from a given dataset.
+
         Pipelines are made of:
             - A `Prompt Dataset` - that converts a given dataset to suitable prompts
             - Model inference - to generate text from the prompt
@@ -38,9 +40,9 @@ class TextClassificationSynthesize:
         Args:
             model (Union[str, PreTrainedModel]): Path or 🤗 model hub identifier. Currently supports Causal LM models only.
             device (Optional[int], optional): GPU Device to run the inference. Defaults to -1, runs on CPU.
-            generate_kwargs : Keyword arguments to override default generation params. This will be passed as generation params to model.generate - 
+            generate_kwargs : Keyword arguments to override default generation params. This will be passed as generation params to model.generate -
             https://github.com/huggingface/transformers/blob/fcb4f11c9232cee2adce8140a3a7689578ea97de/src/transformers/generation_utils.py#L803
-        
+
         Examples:
         --------
 
@@ -50,7 +52,7 @@ class TextClassificationSynthesize:
                 model="EleutherAI/gpt-neo-2.7B",
                 device=1,
             )
-        
+
         Overriding the generation params:
 
         >> pipe = TextClassificationSynthesize(
@@ -64,11 +66,13 @@ class TextClassificationSynthesize:
                 early_stopping=True,
                 no_repeat_ngram_size=2,
             )
-        
+
         """
         self.infer = TextGeneration(model_name=model, device=device)
         self._collate_fn = partial(
-            TextClassSynthesizePromptDataset._collate_fn, self.infer.tokenizer, self.infer.device
+            TextClassSynthesizePromptDataset._collate_fn,
+            self.infer.tokenizer,
+            self.infer.device,
         )
         self.generate_kwargs = (
             self.generate_kwargs if not generate_kwargs else generate_kwargs
@@ -87,7 +91,7 @@ class TextClassificationSynthesize:
         label_column_alias: Optional[str] = None,
         class_names: Optional[List[str]] = [],
         dataset_args: Optional[List[str]] = [],
-        dataset_kwargs: Optional[Dict[str,str]] = {},
+        dataset_kwargs: Optional[Dict[str, str]] = {},
         batch_size: Optional[int] = 2,
         shot_count: Optional[int] = 5,
         infinite_loop: Optional[bool] = False,
@@ -127,9 +131,9 @@ class TextClassificationSynthesize:
 
         Examples:
         --------
-        
+
         Using 🤗 Datasets:
-        
+
         >> pipe = TextClassificationSynthesize(
                 model="EleutherAI/gpt-neo-2.7B",
                 device=1,
@@ -165,8 +169,6 @@ class TextClassificationSynthesize:
             )
         """
 
-        
-
         dataset = TextClassSynthesizePromptDataset(
             path=dataset_path,
             data_files=data_files,
@@ -180,10 +182,8 @@ class TextClassificationSynthesize:
             class_names=class_names,
             shot_count=shot_count,
             dataset_args=dataset_args,
-            dataset_kwargs=dataset_kwargs
+            dataset_kwargs=dataset_kwargs,
         )
-
-        
 
         parser = TextClassificationSynthesizeParser(
             label_title=dataset.label_title, example_title=dataset.example_title
@@ -206,7 +206,6 @@ class TextClassificationSynthesize:
             num_return_sequences = len(batch_generated_texts) // len(batch["input_ids"])
 
             for idx, generated_text in enumerate(batch_generated_texts):
-
                 class_idx = idx // num_return_sequences
                 class_name = batch["class_names"][class_idx]
 
@@ -214,13 +213,7 @@ class TextClassificationSynthesize:
                     generated_text=generated_text, label=class_name
                 )
 
-                
                 batch_parsed_examples.extend(parsed_examples)
                 batch_class_names.extend([class_name] * len(parsed_examples))
-            
 
-
-            yield {
-                text_column : batch_parsed_examples,
-                label_column : batch_class_names
-            }
+            yield {text_column: batch_parsed_examples, label_column: batch_class_names}

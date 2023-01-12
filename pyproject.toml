@@ -1,0 +1,23 @@
+[tool.poetry]
+name = "mutate-nlp"
+version = "0.1.1"
+description = "Text data synthesize and pseudo labelling using LLMs"
+authors = ["Logesh Kumar Umapathi <logeshkumaru@gmail.com>"]
+license = "Apache"
+readme = "README.md"
+packages = [{include = "mutate_nlp"}]
+
+[tool.poetry.dependencies]
+python = "^3.8"
+pandas = "^1.5.2"
+tqdm = "^4.64.1"
+numpy = "^1.24.1"
+torch = ">=1.0"
+Jinja2 = ">=3.0.3"
+transformers = ">=4.5.1"
+datasets = ">=1.6.2"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
