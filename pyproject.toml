@@ -1,11 +1,11 @@
 [tool.poetry]
 name = "mutate-nlp"
-version = "0.1.1"
+version = "0.1.2"
 description = "Text data synthesize and pseudo labelling using LLMs"
 authors = ["Logesh Kumar Umapathi <logeshkumaru@gmail.com>"]
 license = "Apache"
 readme = "README.md"
-packages = [{include = "mutate_nlp"}]
+packages = [{include = "mutate"}]
 
 [tool.poetry.dependencies]
 python = "^3.8"

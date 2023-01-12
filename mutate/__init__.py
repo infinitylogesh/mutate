@@ -2,7 +2,7 @@ from typing import Dict, List, Optional, Union
 
 from transformers import PreTrainedModel
 
-from mutate_nlp.pipelines.text_classification import TextClassificationSynthesize
+from mutate.pipelines.text_classification import TextClassificationSynthesize
 
 SUPPORTED_TASKS = {"text-classification-synthesis": TextClassificationSynthesize}
 

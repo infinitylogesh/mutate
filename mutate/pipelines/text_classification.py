@@ -5,11 +5,9 @@ from typing import Dict, List, Optional, Union
 from torch.utils.data import DataLoader
 from transformers import PreTrainedModel, set_seed
 
-from mutate_nlp.infer import TextGeneration
-from mutate_nlp.parsers.text_classification import TextClassificationSynthesizeParser
-from mutate_nlp.prompt_datasets.text_classification import (
-    TextClassSynthesizePromptDataset,
-)
+from mutate.infer import TextGeneration
+from mutate.parsers.text_classification import TextClassificationSynthesizeParser
+from mutate.prompt_datasets.text_classification import TextClassSynthesizePromptDataset
 
 
 class TextClassificationSynthesize:
